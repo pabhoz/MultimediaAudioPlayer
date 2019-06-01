@@ -43,7 +43,7 @@ class AudioPlayer {
         this.player.src = src;
         this.player.onloadedmetadata = () => {
             this.gui = {
-                totalTime: { value: this.player.duration, DOMElement: this.gui.totalTime.DOMElement },
+                totalTime: { value: this.player.duration, DOMElement: this.gui.totalTime.DOMElement},
                 currentTime: { value: 0, DOMElement: this.gui.currentTime.DOMElement }
             }
         }
@@ -57,6 +57,20 @@ class AudioPlayer {
             let pBar = this.gui.progressBar.DOMElement.querySelector("div");
             pBar.style.width = `${progress}%`;
         }
+
+    }
+
+    _setToMinsSecond(time){
+        var time    = parseInt(time);
+        let minutes = Math.floor(time / 60);
+        let seconds = time - minutes * 60;
+        var hours = Math.floor(time / 3600);
+        time = time - hours * 3600;
+        let finalTime = this._str_pad_left(minutes,'0',2)+':'+this._str_pad_left(seconds,'0',2);
+        return finalTime;
+    }
+    _str_pad_left(string,pad,length) {
+        return (new Array(length+1).join(pad)+string).slice(-length);
     }
 
     _initGUI(...params) {
@@ -170,7 +184,7 @@ class AudioPlayer {
 
     _updateBasigGUIElement(el) {
         if (el.DOMElement instanceof HTMLElement) {
-            el.DOMElement.innerHTML = el.value;
+            el.DOMElement.innerHTML = this._setToMinsSecond(el.value) ;
         }
     }
 
